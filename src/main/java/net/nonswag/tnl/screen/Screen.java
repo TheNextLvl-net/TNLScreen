@@ -138,9 +138,6 @@ public class Screen {
             if (command.isEmpty()) {
                 throw new ScreenException("Command can't be empty");
             }
-            if (!getScreens(name).isEmpty()) {
-                throw new ScreenException("Duplicate screen");
-            }
             return Runtime.getRuntime().exec("screen -dmS " + name + " " + command, null, directory);
         } catch (IOException e) {
             throw new ScreenException(e.getMessage(), e);

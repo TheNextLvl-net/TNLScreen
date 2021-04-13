@@ -51,7 +51,6 @@ public class Screen {
             Process process = Runtime.getRuntime().exec("screen -X -S " + getId() + "." + getName() + " quit");
             process.waitFor();
             process.destroy();
-            System.out.println("terminated screen " + getName() + " with id " + getId());
         } catch (Exception e) {
             throw new ScreenException(e.getMessage(), e);
         }
@@ -62,7 +61,6 @@ public class Screen {
             Process process = Runtime.getRuntime().exec("screen -wipe " + getId() + "." + getName());
             process.waitFor();
             process.destroy();
-            System.out.println("wiped screen " + getName() + " with id " + getId());
         } catch (Exception e) {
             throw new ScreenException(e.getMessage(), e);
         }

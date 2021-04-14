@@ -46,9 +46,14 @@ public class Screen {
         return state;
     }
 
+    @Nonnull
+    public String getFullName() {
+        return getId() + "." + getName();
+    }
+
     public void terminate() throws ScreenException {
         try {
-            Process process = Runtime.getRuntime().exec("screen -X -S " + getId() + "." + getName() + " quit");
+            Process process = Runtime.getRuntime().exec("screen -X -S " + getFullName() + " quit");
             process.waitFor();
             process.destroy();
         } catch (Exception e) {
@@ -58,7 +63,17 @@ public class Screen {
 
     public void wipe() throws ScreenException {
         try {
-            Process process = Runtime.getRuntime().exec("screen -wipe " + getId() + "." + getName());
+            Process process = Runtime.getRuntime().exec("screen -wipe " + getFullName());
+            process.waitFor();
+            process.destroy();
+        } catch (Exception e) {
+            throw new ScreenException(e.getMessage(), e);
+        }
+    }
+
+    public void detach() throws ScreenException {
+        try {
+            Process process = Runtime.getRuntime().exec("screen -d " + getFullName());
             process.waitFor();
             process.destroy();
         } catch (Exception e) {
@@ -68,7 +83,7 @@ public class Screen {
 
     @Override
     public String toString() {
-        return "net.nonswag.tnl.screen.Screen{" +
+        return "Screen{" +
                 "id=" + id +
                 ", name='" + name + '\'' +
                 ", date='" + date + '\'' +
@@ -111,6 +126,24 @@ public class Screen {
                 for (String name : screens) {
                     for (Screen screen : getScreens(name)) {
                         screen.wipe();
+                    }
+                }
+            }
+        } catch (Exception e) {
+            throw new ScreenException(e.getMessage(), e);
+        }
+    }
+
+    public static void detach(@Nonnull String... screens) throws ScreenException {
+        try {
+            if (screens.length == 0) {
+                Process process = Runtime.getRuntime().exec("screen -d");
+                process.waitFor();
+                process.destroy();
+            } else {
+                for (String name : screens) {
+                    for (Screen screen : getScreens(name)) {
+                        screen.detach();
                     }
                 }
             }

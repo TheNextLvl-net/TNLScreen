@@ -81,6 +81,16 @@ public class Screen {
         }
     }
 
+    public void run(@Nonnull String command) throws ScreenException {
+        try {
+            Process process = Runtime.getRuntime().exec("screen -S " + getFullName() + " -X stuff " + command + "\\n");
+            process.waitFor();
+            process.destroy();
+        } catch (Exception e) {
+            throw new ScreenException(e.getMessage(), e);
+        }
+    }
+
     @Override
     public String toString() {
         return "Screen{" +
@@ -106,11 +116,7 @@ public class Screen {
 
     public static void terminate(@Nonnull String... screens) throws ScreenException {
         try {
-            for (String name : screens) {
-                for (Screen screen : getScreens(name)) {
-                    screen.terminate();
-                }
-            }
+            for (String name : screens) for (Screen screen : getScreens(name)) screen.terminate();
         } catch (Exception e) {
             throw new ScreenException(e.getMessage(), e);
         }
@@ -123,11 +129,7 @@ public class Screen {
                 process.waitFor();
                 process.destroy();
             } else {
-                for (String name : screens) {
-                    for (Screen screen : getScreens(name)) {
-                        screen.wipe();
-                    }
-                }
+                for (String name : screens) for (Screen screen : getScreens(name)) screen.wipe();
             }
         } catch (Exception e) {
             throw new ScreenException(e.getMessage(), e);
@@ -141,11 +143,7 @@ public class Screen {
                 process.waitFor();
                 process.destroy();
             } else {
-                for (String name : screens) {
-                    for (Screen screen : getScreens(name)) {
-                        screen.detach();
-                    }
-                }
+                for (String name : screens) for (Screen screen : getScreens(name)) screen.detach();
             }
         } catch (Exception e) {
             throw new ScreenException(e.getMessage(), e);
@@ -155,20 +153,14 @@ public class Screen {
     @Nonnull
     public static List<Screen> getScreens(@Nonnull String name) throws ScreenException {
         List<Screen> screens = new ArrayList<>();
-        for (Screen screen : getScreens()) {
-            if (screen.getName().equals(name)) {
-                screens.add(screen);
-            }
-        }
+        for (Screen screen : getScreens()) if (screen.getName().equals(name)) screens.add(screen);
         return screens;
     }
 
     @Nonnull
     public static Process start(@Nonnull String name, @Nullable File directory, @Nonnull String command) throws ScreenException {
         try {
-            if (command.isEmpty()) {
-                throw new ScreenException("Command can't be empty");
-            }
+            if (command.isEmpty()) throw new ScreenException("Command can't be empty");
             return Runtime.getRuntime().exec("screen -dmS " + name + " " + command, null, directory);
         } catch (IOException e) {
             throw new ScreenException(e.getMessage(), e);
@@ -202,9 +194,7 @@ public class Screen {
             Process process = Runtime.getRuntime().exec("screen -list");
             BufferedReader br = new BufferedReader(new InputStreamReader(process.getInputStream()));
             String string;
-            while ((string = br.readLine()) != null) {
-                callback.add(string);
-            }
+            while ((string = br.readLine()) != null) callback.add(string);
             process.waitFor();
             process.destroy();
             br.close();

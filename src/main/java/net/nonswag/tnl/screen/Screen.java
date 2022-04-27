@@ -1,5 +1,7 @@
 package net.nonswag.tnl.screen;
 
+import lombok.Getter;
+
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.io.BufferedReader;
@@ -10,6 +12,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
+@Getter
 public class Screen {
 
     private final int id;
@@ -25,25 +28,6 @@ public class Screen {
         this.name = name;
         this.date = date;
         this.state = state;
-    }
-
-    public int getId() {
-        return id;
-    }
-
-    @Nonnull
-    public String getName() {
-        return name;
-    }
-
-    @Nonnull
-    public String getDate() {
-        return date;
-    }
-
-    @Nonnull
-    public State getState() {
-        return state;
     }
 
     @Nonnull
@@ -83,7 +67,7 @@ public class Screen {
 
     public void run(@Nonnull String command) throws ScreenException {
         try {
-            Process process = Runtime.getRuntime().exec("screen -S " + getFullName() + " -X stuff " + command + "\\n");
+            Process process = Runtime.getRuntime().exec("screen -S " + getFullName() + " -X stuff \"" + command + "\\n\"");
             process.waitFor();
             process.destroy();
         } catch (Exception e) {

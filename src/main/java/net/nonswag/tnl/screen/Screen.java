@@ -67,7 +67,7 @@ public class Screen {
 
     public void run(@Nonnull String command) throws ScreenException {
         try {
-            Process process = Runtime.getRuntime().exec("screen -S " + getFullName() + " -X stuff \"" + command + "\\n\"");
+            Process process = Runtime.getRuntime().exec(new String[]{"screen", "-S", getFullName(), "-X", "stuff", command + "\\n"});
             process.waitFor();
             process.destroy();
         } catch (Exception e) {

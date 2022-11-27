@@ -1,4 +1,4 @@
-package net.nonswag.tnl.screen;
+package net.nonswag.screen;
 
 import javax.annotation.Nonnull;
 

@@ -1,4 +1,4 @@
-package net.nonswag.tnl.screen;
+package net.nonswag.screen;
 
 import lombok.Getter;
 
@@ -37,7 +37,7 @@ public class Screen {
 
     public void terminate() throws ScreenException {
         try {
-            Process process = Runtime.getRuntime().exec("screen -X -S " + getFullName() + " quit");
+            Process process = Runtime.getRuntime().exec(new String[]{"screen", "-X", "-S", getFullName(), "quit"});
             process.waitFor();
             process.destroy();
         } catch (Exception e) {
@@ -47,7 +47,7 @@ public class Screen {
 
     public void wipe() throws ScreenException {
         try {
-            Process process = Runtime.getRuntime().exec("screen -wipe " + getFullName());
+            Process process = Runtime.getRuntime().exec(new String[]{"screen", "-wipe", getFullName()});
             process.waitFor();
             process.destroy();
         } catch (Exception e) {
@@ -57,7 +57,7 @@ public class Screen {
 
     public void detach() throws ScreenException {
         try {
-            Process process = Runtime.getRuntime().exec("screen -d " + getFullName());
+            Process process = Runtime.getRuntime().exec(new String[]{"screen", "-d", getFullName()});
             process.waitFor();
             process.destroy();
         } catch (Exception e) {
@@ -109,7 +109,7 @@ public class Screen {
     public static void wipe(@Nonnull String... screens) throws ScreenException {
         try {
             if (screens.length == 0) {
-                Process process = Runtime.getRuntime().exec("screen -wipe");
+                Process process = Runtime.getRuntime().exec(new String[]{"screen", "-wipe"});
                 process.waitFor();
                 process.destroy();
             } else {
@@ -123,7 +123,7 @@ public class Screen {
     public static void detach(@Nonnull String... screens) throws ScreenException {
         try {
             if (screens.length == 0) {
-                Process process = Runtime.getRuntime().exec("screen -d");
+                Process process = Runtime.getRuntime().exec(new String[]{"screen", "-d"});
                 process.waitFor();
                 process.destroy();
             } else {
@@ -145,7 +145,7 @@ public class Screen {
     public static Process start(@Nonnull String name, @Nullable File directory, @Nonnull String command) throws ScreenException {
         try {
             if (command.isEmpty()) throw new ScreenException("Command can't be empty");
-            return Runtime.getRuntime().exec("screen -dmS " + name + " " + command, null, directory);
+            return Runtime.getRuntime().exec(new String[]{"screen", "-dmS", name, command}, null, directory);
         } catch (IOException e) {
             throw new ScreenException(e.getMessage(), e);
         }
@@ -175,7 +175,7 @@ public class Screen {
     public static List<String> list() throws ScreenException {
         List<String> callback = new ArrayList<>();
         try {
-            Process process = Runtime.getRuntime().exec("screen -list");
+            Process process = Runtime.getRuntime().exec(new String[]{"screen", "-list"});
             BufferedReader br = new BufferedReader(new InputStreamReader(process.getInputStream()));
             String string;
             while ((string = br.readLine()) != null) callback.add(string);

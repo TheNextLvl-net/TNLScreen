@@ -1,14 +1,15 @@
 package net.nonswag.screen;
 
-import javax.annotation.Nonnull;
+import javax.annotation.ParametersAreNonnullByDefault;
 
+@ParametersAreNonnullByDefault
 public class ScreenException extends Exception {
 
-    public ScreenException(@Nonnull String message, @Nonnull Throwable cause) {
+    public ScreenException(String message, Throwable cause) {
         super(message, cause);
     }
 
-    public ScreenException(@Nonnull String message) {
+    public ScreenException(String message) {
         super(message);
     }
 

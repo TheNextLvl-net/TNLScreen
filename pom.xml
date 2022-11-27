@@ -45,5 +45,10 @@
             <artifactId>jsr305</artifactId>
             <version>3.0.2</version>
         </dependency>
+        <dependency>
+            <groupId>net.nonswag.core</groupId>
+            <artifactId>core-api</artifactId>
+            <version>1.0</version>
+        </dependency>
     </dependencies>
 </project>

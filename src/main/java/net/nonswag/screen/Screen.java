@@ -1,36 +1,34 @@
 package net.nonswag.screen;
 
+import lombok.AllArgsConstructor;
+import lombok.EqualsAndHashCode;
 import lombok.Getter;
+import lombok.ToString;
+import net.nonswag.core.api.annotation.FieldsAreNonnullByDefault;
+import net.nonswag.core.api.annotation.MethodsReturnNonnullByDefault;
 
-import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
+import javax.annotation.ParametersAreNonnullByDefault;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
-import java.util.Objects;
 
 @Getter
+@ToString
+@EqualsAndHashCode
+@AllArgsConstructor
+@FieldsAreNonnullByDefault
+@ParametersAreNonnullByDefault
+@MethodsReturnNonnullByDefault
 public class Screen {
-
     private final int id;
-    @Nonnull
-    private final String name;
-    @Nonnull
-    private final String date;
-    @Nonnull
+    private final String name, date;
     private final State state;
 
-    public Screen(int id, @Nonnull String name, @Nonnull String date, @Nonnull State state) {
-        this.id = id;
-        this.name = name;
-        this.date = date;
-        this.state = state;
-    }
-
-    @Nonnull
     public String getFullName() {
         return getId() + "." + getName();
     }
@@ -65,7 +63,7 @@ public class Screen {
         }
     }
 
-    public void run(@Nonnull String command) throws ScreenException {
+    public void run(String command) throws ScreenException {
         try {
             Process process = Runtime.getRuntime().exec(new String[]{"screen", "-S", getFullName(), "-X", "stuff", command + "\\n"});
             process.waitFor();
@@ -75,30 +73,7 @@ public class Screen {
         }
     }
 
-    @Override
-    public String toString() {
-        return "Screen{" +
-                "id=" + id +
-                ", name='" + name + '\'' +
-                ", date='" + date + '\'' +
-                ", state=" + state +
-                '}';
-    }
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        Screen screen = (Screen) o;
-        return id == screen.id && name.equals(screen.name) && date.equals(screen.date) && state == screen.state;
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(id, name, date, state);
-    }
-
-    public static void terminate(@Nonnull String... screens) throws ScreenException {
+    public static void terminate(String... screens) throws ScreenException {
         try {
             for (String name : screens) for (Screen screen : getScreens(name)) screen.terminate();
         } catch (Exception e) {
@@ -106,7 +81,7 @@ public class Screen {
         }
     }
 
-    public static void wipe(@Nonnull String... screens) throws ScreenException {
+    public static void wipe(String... screens) throws ScreenException {
         try {
             if (screens.length == 0) {
                 Process process = Runtime.getRuntime().exec(new String[]{"screen", "-wipe"});
@@ -120,7 +95,7 @@ public class Screen {
         }
     }
 
-    public static void detach(@Nonnull String... screens) throws ScreenException {
+    public static void detach(String... screens) throws ScreenException {
         try {
             if (screens.length == 0) {
                 Process process = Runtime.getRuntime().exec(new String[]{"screen", "-d"});
@@ -134,24 +109,26 @@ public class Screen {
         }
     }
 
-    @Nonnull
-    public static List<Screen> getScreens(@Nonnull String name) throws ScreenException {
+    public static List<Screen> getScreens(String name) throws ScreenException {
         List<Screen> screens = new ArrayList<>();
         for (Screen screen : getScreens()) if (screen.getName().equals(name)) screens.add(screen);
         return screens;
     }
 
-    @Nonnull
-    public static Process start(@Nonnull String name, @Nullable File directory, @Nonnull String command) throws ScreenException {
+    public static Process start(String name, @Nullable File directory, String command) throws ScreenException {
         try {
             if (command.isEmpty()) throw new ScreenException("Command can't be empty");
-            return Runtime.getRuntime().exec(new String[]{"screen", "-dmS", name, command}, null, directory);
+            List<String> commands = new ArrayList<>();
+            commands.add("screen");
+            commands.add("-dmS");
+            commands.add(name);
+            commands.addAll(Arrays.asList(command.split(" ")));
+            return Runtime.getRuntime().exec(commands.toArray(new String[]{}), null, directory);
         } catch (IOException e) {
             throw new ScreenException(e.getMessage(), e);
         }
     }
 
-    @Nonnull
     public static List<Screen> getScreens() throws ScreenException {
         List<Screen> screens = new ArrayList<>();
         try {
@@ -171,7 +148,6 @@ public class Screen {
         return screens;
     }
 
-    @Nonnull
     public static List<String> list() throws ScreenException {
         List<String> callback = new ArrayList<>();
         try {
@@ -194,7 +170,7 @@ public class Screen {
         TERMINATED;
 
         @Nullable
-        public static State getByName(@Nonnull String name) {
+        public static State getByName(String name) {
             try {
                 return valueOf(name.toUpperCase());
             } catch (Exception ignored) {

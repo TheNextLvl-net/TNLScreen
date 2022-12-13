@@ -33,6 +33,20 @@
         </plugins>
     </build>
 
+    <distributionManagement>
+        <repository>
+            <id>releases</id>
+            <url>https://repo.thenextlvl.net/repository/maven-public/</url>
+        </repository>
+    </distributionManagement>
+
+    <repositories>
+        <repository>
+            <id>releases</id>
+            <url>https://repo.thenextlvl.net/repository/maven-public/</url>
+        </repository>
+    </repositories>
+
     <dependencies>
         <dependency>
             <groupId>org.projectlombok</groupId>

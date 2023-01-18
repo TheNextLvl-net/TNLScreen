@@ -6,7 +6,7 @@
 
     <groupId>net.nonswag</groupId>
     <artifactId>screen-api</artifactId>
-    <version>1.2</version>
+    <version>1.2.0</version>
 
     <properties>
         <maven.compiler.source>17</maven.compiler.source>
@@ -36,14 +36,14 @@
     <distributionManagement>
         <repository>
             <id>releases</id>
-            <url>https://repo.thenextlvl.net/repository/maven-public/</url>
+            <url>https://repo.thenextlvl.net/releases</url>
         </repository>
     </distributionManagement>
 
     <repositories>
         <repository>
             <id>releases</id>
-            <url>https://repo.thenextlvl.net/repository/maven-public/</url>
+            <url>https://repo.thenextlvl.net/releases</url>
         </repository>
     </repositories>
 

@@ -1,5 +1,5 @@
 # TNLScreen
-An easy to use and lightweight screen api for java
+An easy-to-use and lightweight screen api for java
 ```xml
 <repository>
     <id>releases</id>
@@ -11,6 +11,6 @@ An easy to use and lightweight screen api for java
 <dependency>
     <groupId>net.nonswag</groupId>
     <artifactId>screen-api</artifactId>
-    <version>1.2</version>
+    <version>1.2.0</version>
 </dependency>
  ```
